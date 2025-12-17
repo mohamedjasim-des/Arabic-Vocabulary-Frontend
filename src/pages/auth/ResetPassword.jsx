@@ -1,10 +1,10 @@
 // pages/ResetPassword.jsx
 import { useState } from "react";
-import API from "../../utils/authHeader";
 import Input from "../../components/auth/Input";
 import Button from "../../components/auth/Button";
 import AuthLayout from "../../components/auth/AuthLayout";
 import { useLocation, useNavigate } from "react-router-dom";
+import { resetPassword } from "../../utils/api";
 
 export default function ResetPassword() {
   const location = useLocation();
@@ -20,7 +20,11 @@ export default function ResetPassword() {
 
   const reset = async () => {
     setLoading(true);
-    await API.post("/auth/reset-password", { email, ...data });
+    await resetPassword({
+      email,
+      otp: data.otp,
+      newPassword: data.newPassword
+    });
     alert("Password reset successful");
     setLoading(false);
     navigate("/login");

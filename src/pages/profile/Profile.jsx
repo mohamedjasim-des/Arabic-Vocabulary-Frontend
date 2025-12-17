@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { changePassword, getUserProfile } from "../../utils/api";
-import { toast } from "react-hot-toast";
-import { ArrowLeft } from "lucide-react";
+import { changePassword, getUserProfile, logout } from "../../utils/api";
+import { ArrowLeft, LogOut } from "lucide-react";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -20,9 +19,8 @@ export default function Profile() {
       try {
         const res = await getUserProfile();
         setUser(res.data);
-      } catch (err) {
-        console.error(err);
-        toast.error("Failed to load profile");
+      } catch {
+        alert("Failed to load profile");
       }
     };
     fetchProfile();
@@ -37,7 +35,7 @@ export default function Profile() {
     setLoading(true);
 
     if (passwords.newPassword !== passwords.confirmPassword) {
-      toast.error("New password and confirm password do not match");
+      alert("Passwords do not match");
       setLoading(false);
       return;
     }
@@ -47,84 +45,95 @@ export default function Profile() {
         oldPassword: passwords.oldPassword,
         newPassword: passwords.newPassword,
       });
-      toast.success("Password changed successfully!");
+      alert("Password changed successfully!");
       setPasswords({ oldPassword: "", newPassword: "", confirmPassword: "" });
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to change password");
+    } catch {
+      alert("Failed to change password");
     }
 
     setLoading(false);
   };
 
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-    {/* Back Button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-4 left-4 flex items-center gap-1 text-gray-600 hover:text-blue-600"
-        >
-          <ArrowLeft size={18} />
-          Back
-        </button>
+      
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-4 left-4 flex items-center gap-1 text-gray-600 hover:text-blue-600"
+      >
+        <ArrowLeft size={18} />
+        Back
+      </button>
+
       <div className="relative w-full max-w-2xl bg-white shadow-lg rounded-xl p-6">
-        {/* Profile Header */}
-        <div className="flex items-center gap-4 mb-6 mt-4">
-          <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-2xl">
-            {user.name?.charAt(0)?.toUpperCase()}
+        
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-2xl">
+              {user.name?.charAt(0)?.toUpperCase()}
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800">
+                {user.name}
+              </h2>
+              <p className="text-gray-500">{user.email}</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800">
-              {user.name}
-            </h2>
-            <p className="text-gray-500">{user.email}</p>
-          </div>
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-1 px-4 py-2 text-red-600 
+                       border border-red-200 rounded-lg hover:bg-red-50"
+          >
+            <LogOut size={16} />
+            Logout
+          </button>
         </div>
 
         {/* Password Form */}
         <form onSubmit={handlePasswordChange} className="space-y-4">
-          <div>
-            <label className="block text-gray-700 mb-1">Old Password</label>
-            <input
-              type="password"
-              name="oldPassword"
-              value={passwords.oldPassword}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400"
-              required
-            />
-          </div>
+          <input
+            type="password"
+            name="oldPassword"
+            placeholder="Old Password"
+            value={passwords.oldPassword}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400"
+            required
+          />
 
-          <div>
-            <label className="block text-gray-700 mb-1">New Password</label>
-            <input
-              type="password"
-              name="newPassword"
-              value={passwords.newPassword}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400"
-              required
-            />
-          </div>
+          <input
+            type="password"
+            name="newPassword"
+            placeholder="New Password"
+            value={passwords.newPassword}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400"
+            required
+          />
 
-          <div>
-            <label className="block text-gray-700 mb-1">
-              Confirm New Password
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={passwords.confirmPassword}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400"
-              required
-            />
-          </div>
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm New Password"
+            value={passwords.confirmPassword}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400"
+            required
+          />
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded shadow ${
+            className={`w-full py-2 bg-blue-500 hover:bg-blue-600 
+                        text-white font-medium rounded ${
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >

@@ -1,11 +1,11 @@
 // pages/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../../utils/authHeader";
 import Input from "../../components/auth/Input";
 import Button from "../../components/auth/Button";
 import AuthLayout from "../../components/auth/AuthLayout";
 import { setToken } from "../../utils/cookie";
+import { login } from "../../utils/api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -18,7 +18,7 @@ export default function Login() {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const res = await API.post("/auth/login", { email, password });
+      const res = await login({ email, password });
       setToken(res.data.token);
       navigate("/");
     } catch (err) {

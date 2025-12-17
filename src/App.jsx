@@ -7,7 +7,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 
 import ProtectedRoute from "./utils/ProtectedRoute";
-import Home from "./pages/Home";
+import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
 
 export default function App() {

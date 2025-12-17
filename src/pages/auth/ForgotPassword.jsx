@@ -1,10 +1,10 @@
 // pages/ForgotPassword.jsx
 import { useState } from "react";
-import API from "../../utils/authHeader";
 import Input from "../../components/auth/Input";
 import Button from "../../components/auth/Button";
 import AuthLayout from "../../components/auth/AuthLayout";
 import { useNavigate } from "react-router-dom";
+import { forgotPassword } from "../../utils/api";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -13,7 +13,7 @@ export default function ForgotPassword() {
 
   const sendOtp = async () => {
     setLoading(true);
-    await API.post("/auth/forgot-password", { email });
+    await forgotPassword({ email });
     alert("OTP sent");
     setLoading(false);
     navigate("/reset-password", { state: { email } });

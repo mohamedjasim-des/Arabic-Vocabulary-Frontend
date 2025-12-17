@@ -1,11 +1,11 @@
 // pages/Register.jsx
 import { useState } from "react";
-import API from "../../utils/authHeader";
 import Input from "../../components/auth/Input";
 import Button from "../../components/auth/Button";
 import AuthLayout from "../../components/auth/AuthLayout";
 import { setToken } from "../../utils/cookie";
 import { useNavigate } from "react-router-dom";
+import { register } from "../../utils/api";
 
 export default function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -19,7 +19,7 @@ export default function Register() {
       alert("Passwords do not match");
       return;
     }
-    const res = await API.post("/auth/register", form);
+    const res = await register(form);
     setToken(res.data.token);
     alert("Registered successfully");
     setLoading(false);
