@@ -1,68 +1,157 @@
-import { logout } from "../utils/auth";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import WordRow from "../components/home/WordRow";
+import {
+  createWord,
+  getWords,
+  updateWord,
+  deleteWord
+} from "../utils/wordApi";
 
 export default function Home() {
-  const navigate = useNavigate();
+  const [rows, setRows] = useState([]);
+  const [scrolledToBottom, setScrolledToBottom] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const createEmptyEntry = () => ({
+    arabic: "",
+    english: "",
+    tamil: "",
+    note: "",
+  });
+
+  /* ================= FETCH ================= */
+  useEffect(() => {
+    (async () => {
+      const res = await getWords();
+
+      const formatted = res.data.data.map(w => ({
+        id: w.sNo,
+        _id: w._id,
+        entries: w.meanings.map(m => ({
+          arabic: m.arabic || "",
+          english: m.english || "",
+          tamil: m.tamil || "",
+          note: m.tense || "",
+        })),
+      }));
+
+      setRows(formatted);
+    })();
+  }, []);
+
+  useEffect(() => {
+    
+    if (rows.length === 0 || scrolledToBottom) return;
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+    if(!scrolledToBottom) setScrolledToBottom(true);
+  }, [rows]);
+
+  /* ================= ADD ================= */
+  const addSerial = async () => {
+    const payload = {
+      sNo: rows.length + 1,
+      rootWord: "-",
+      note: "Noun",
+      meanings: [
+        {
+          tense: "-",
+          arabic: "-",
+          english: "-",
+          tamil: "-",
+        },
+      ],
+    };
+
+    const res = await createWord(payload);
+
+    setRows(prev => [
+      ...prev,
+      {
+        id: res.data.data.sNo,
+        _id: res.data.data._id,
+        entries: [{
+          arabic: "",
+          english: "",
+          tamil: "",
+          note: "",
+        }],
+      },
+    ]);
+  };
+
+  /* ================= UPDATE ================= */
+  const updateRow = async (id, updatedEntries) => {
+    const row = rows.find(r => r.id === id);
+    if (!row?._id) return;
+    setRows(prev =>
+      prev.map(r =>
+        r.id === id ? { ...r, entries: updatedEntries } : r
+      )
+    );
+    await updateWord(row._id, {
+      meanings: updatedEntries.map(e => ({
+        tense: e.note?.trim() || "-",
+        arabic: e.arabic?.trim() || "-",
+        english: e.english?.trim() || "-",
+        tamil: e.tamil?.trim() || "-",
+      })),
+    });
+  };
+
+
+  /* ================= DELETE ================= */
+  const deleteRow = async (id) => {
+    const row = rows.find(r => r.id === id);
+    if (!row?._id) return;
+
+    // optimistic UI
+    setRows(prev => prev.filter(r => r.id !== id));
+
+    await deleteWord(row._id);
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-blue-600">Auth App</h1>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600"
-          >
-            Logout
-          </button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <h1 className="text-2xl font-semibold text-center mb-6">
+        Arabic Word Entry
+      </h1>
 
-      {/* Content */}
-      <main className="max-w-7xl mx-auto px-6 py-10">
-        <h2 className="text-3xl font-semibold mb-4">
-          Welcome 🎉
-        </h2>
-        <p className="text-gray-600 mb-8">
-          You are successfully logged in using cookie-based authentication.
-        </p>
+      <div className="bg-white border">
+        <table className="w-full text-sm border-collapse">
+          <thead className="bg-gray-100 sticky top-0 z-20">
+            <tr>
+              <th className="p-3 font-english">S.No</th>
+              <th className="p-3 font-arabic text-lg">العربية</th>
+              <th className="p-3 font-english">English</th>
+              <th className="p-3 font-tamil">தமிழ்</th>
+              <th className="p-3 font-english">Note</th>
+              <th className="p-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(row => (
+              <WordRow
+                key={row.id}
+                row={row}
+                onChange={updateRow}
+                onDelete={deleteRow}
+                createEmptyEntry={createEmptyEntry}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl shadow p-6">
-            <h3 className="font-semibold text-lg mb-2">Profile</h3>
-            <p className="text-gray-500 text-sm">
-              Manage your account settings and password.
-            </p>
-            <button
-              onClick={() => navigate("/change-password")}
-              className="mt-4 text-blue-600 font-medium"
-            >
-              Change Password →
-            </button>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-6">
-            <h3 className="font-semibold text-lg mb-2">Security</h3>
-            <p className="text-gray-500 text-sm">
-              Cookie-based authentication enabled.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-6">
-            <h3 className="font-semibold text-lg mb-2">Status</h3>
-            <p className="text-green-600 font-medium">
-              Session Active ✔
-            </p>
-          </div>
-        </div>
-      </main>
+      <div className="flex justify-center">
+        <button
+          onClick={addSerial}
+          className="w-full py-1 bg-transaparent text-blue-700 hover:bg-blue-500 hover:text-white border border-blue-700 border-t-0"
+        >
+          + Add New Serial No
+        </button>
+      </div>
     </div>
   );
 }

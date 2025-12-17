@@ -1,9 +1,9 @@
 // pages/ForgotPassword.jsx
 import { useState } from "react";
 import API from "../../utils/api";
-import Input from "../components/Input";
-import Button from "../components/Button";
-import AuthLayout from "../components/AuthLayout";
+import Input from "../../components/auth/Input";
+import Button from "../../components/auth/Button";
+import AuthLayout from "../../components/auth/AuthLayout";
 import { useNavigate } from "react-router-dom";
 
 export default function ForgotPassword() {
