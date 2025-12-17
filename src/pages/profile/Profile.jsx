@@ -89,11 +89,11 @@ export default function Profile() {
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1 px-4 py-2 text-red-600 
-                       border border-red-200 rounded-lg hover:bg-red-50"
+            className="flex items-center gap-1 text-red-600 px-2 py-2  md:px-4 md:py-2 border border-red-200 rounded-lg
+            hover:bg-red-50"
           >
             <LogOut size={16} />
-            Logout
+            <span className="hidden md:inline">Logout</span>
           </button>
         </div>
 

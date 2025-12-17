@@ -114,13 +114,9 @@ export default function TableEditor() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <h1 className="text-2xl font-semibold text-center mb-6">
-        Arabic Word Entry
-      </h1>
-
       <div className="bg-white border">
         <table className="w-full text-sm border-collapse">
-          <thead className="bg-gray-100 sticky top-20 z-20">
+          <thead className="hidden md:table-header-group bg-gray-100 sticky top-20 z-20">
             <tr>
               <th className="p-3 font-english">S.No</th>
               <th className="p-3 font-arabic text-lg">العربية</th>

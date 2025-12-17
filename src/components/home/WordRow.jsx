@@ -1,8 +1,8 @@
-import { Plus, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 const ALL_TENSES = ["past", "present", "future"];
 
-export default function WordRow({ row, onChange, onDelete, createEmptyEntry }) {
+export default function WordRow({ row, onChange, onDelete }) {
 
   const updateEntry = (index, field, value) => {
     let updated = row.entries.map((e, i) =>
@@ -16,7 +16,6 @@ export default function WordRow({ row, onChange, onDelete, createEmptyEntry }) {
       row.entries.length === 1
     ) {
       const base = updated[0];
-
       updated = ALL_TENSES.map(tense => ({
         ...base,
         note: tense
@@ -26,10 +25,10 @@ export default function WordRow({ row, onChange, onDelete, createEmptyEntry }) {
     onChange(row.id, updated);
   };
 
-  const font = (field) => {   // fixed arrow function
+  const font = (field) => {
     switch (field) {
       case "arabic":
-        return "font-arabic text-lg text-right rtl"; // added RTL
+        return "font-arabic text-lg text-right rtl";
       case "english":
         return "font-english";
       case "tamil":
@@ -37,29 +36,61 @@ export default function WordRow({ row, onChange, onDelete, createEmptyEntry }) {
       default:
         return "";
     }
-  }
+  };
 
   return (
     <>
       {row.entries.map((entry, index) => (
-        <tr key={index} className="border-t border-gray-200">
-          <td className="p-3 text-center font-medium">
+        <tr
+          key={index}
+          className="border-t border-gray-200 md:table-row block relative"
+        >
+          {/* S.NO + MOBILE DELETE */}
+          <td className="p-3 font-medium block md:table-cell relative">
+            {index === 0 && (
+              <>
+                <span className="md:hidden text-xs text-gray-500 block">
+                  S.No
+                </span>
+
+                {/* MOBILE DELETE BUTTON */}
+                <button
+                  onClick={() => onDelete(row.id)}
+                  className="
+                    md:hidden
+                    absolute top-2 right-2
+                    p-2 rounded-full
+                    bg-red-100 hover:bg-red-200
+                    text-red-600
+                  "
+                >
+                  <Trash2 size={16} />
+                </button>
+              </>
+            )}
             {index === 0 ? row.id : ""}
           </td>
 
+          {/* INPUT FIELDS */}
           {["arabic", "english", "tamil", "note"].map(field => (
-            <td key={field} className="p-2">
+            <td key={field} className="p-2 block md:table-cell">
+              <span className="md:hidden text-xs font-medium text-gray-500 mb-1 block capitalize">
+                {field}
+              </span>
               <input
-                className={`w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 ${font(field)}`}
+                className={`
+                  w-full px-3 py-2 border rounded
+                  focus:ring-2 focus:ring-blue-500
+                  ${font(field)}
+                `}
                 value={entry[field]}
-                onChange={e =>
-                  updateEntry(index, field, e.target.value)
-                }
+                onChange={e => updateEntry(index, field, e.target.value)}
               />
             </td>
           ))}
 
-          <td className="p-2 flex gap-2 items-center justify-center ">
+          {/* DESKTOP DELETE */}
+          <td className="p-2 hidden md:table-cell text-center">
             {index === 0 && (
               <button
                 onClick={() => onDelete(row.id)}

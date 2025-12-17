@@ -74,11 +74,11 @@ export default function TopBar() {
       <div className="flex items-center gap-3">
         <button onClick={() => handleCopyPDFLink()} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium shadow">
           <Share2 size={16} />
-          Share
+          <span className="hidden md:inline">Share</span>
         </button>
         <button onClick={() => handleDownload()} className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 text-gray-700 font-medium shadow-sm">
           <Download size={16} />
-          Export
+          <span className="hidden md:inline">Export</span>
         </button>
       </div>
     </div>
