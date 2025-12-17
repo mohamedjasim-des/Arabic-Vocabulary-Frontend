@@ -1,7 +1,7 @@
 // pages/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../../utils/api";
+import API from "../../utils/authHeader";
 import Input from "../../components/auth/Input";
 import Button from "../../components/auth/Button";
 import AuthLayout from "../../components/auth/AuthLayout";

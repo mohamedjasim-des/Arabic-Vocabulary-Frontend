@@ -1,16 +1,31 @@
-import axios from "axios";
-import { getToken } from "./cookie";
+import API from "./authHeader";
+import { removeToken } from "../utils/cookie";
 
-const API = axios.create({
-  baseURL: "http://localhost:5000/api",
-});
 
-API.interceptors.request.use((config) => {
-  const token = getToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+export const createWord = (payload) =>
+  API.post("/words", payload);
 
-export default API;
+
+export const getWords = () =>
+  API.get("/words");
+
+
+export const updateWord = (id, payload) =>
+  API.put(`/words/${id}`, payload);
+
+
+export const deleteWord = (id) =>
+  API.delete(`/words/${id}`);
+
+
+export const changePassword = (data) =>
+  API.post("/auth/change-password", data);
+
+
+export const logout = () => {
+  removeToken();
+  window.location.href = "/login";
+};
+
+export const getUserProfile = () =>
+  API.get("/user/profile");

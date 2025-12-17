@@ -5,10 +5,10 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-import ChangePassword from "./pages/ChangePassword";
 
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Home from "./pages/Home";
+import Profile from "./pages/profile/Profile";
 
 export default function App() {
   return (
@@ -17,17 +17,15 @@ export default function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
-      <Route
-        path="/change-password"
-        element={
-          <ProtectedRoute>
-            <ChangePassword />
-          </ProtectedRoute>
-        }
-      />
+      
       <Route path="/" element={
         <ProtectedRoute>
           <Home />
+        </ProtectedRoute>
+      } />
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <Profile />
         </ProtectedRoute>
       } />
       <Route path="*" element={<Navigate to="/login" replace />} />
