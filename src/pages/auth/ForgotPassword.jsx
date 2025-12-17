@@ -1,6 +1,6 @@
 // pages/ForgotPassword.jsx
 import { useState } from "react";
-import API from "../utils/api";
+import API from "../../utils/api";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import AuthLayout from "../components/AuthLayout";

@@ -1,10 +1,10 @@
 // pages/Register.jsx
 import { useState } from "react";
-import API from "../utils/api";
+import API from "../../utils/api";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import AuthLayout from "../components/AuthLayout";
-import { setToken } from "../utils/cookie";
+import { setToken } from "../../utils/cookie";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
