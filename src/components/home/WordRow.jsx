@@ -2,7 +2,7 @@ import { Trash2 } from "lucide-react";
 
 const ALL_TENSES = ["past", "present", "future"];
 
-export default function WordRow({ row, onChange, onDelete }) {
+export default function WordRow({ row, onChange, onDelete, duplicateArabic }) {
 
   const updateEntry = (index, field, value) => {
     let updated = row.entries.map((e, i) =>
@@ -78,14 +78,21 @@ export default function WordRow({ row, onChange, onDelete }) {
                 {field}
               </span>
               <input
-                className={`
-                  w-full px-3 py-2 border rounded
-                  focus:ring-2 focus:ring-blue-500
-                  ${font(field)}
-                `}
-                value={entry[field]}
-                onChange={e => updateEntry(index, field, e.target.value)}
-              />
+  className={`
+    w-full px-3 py-2 border rounded
+    focus:ring-2
+    ${font(field)}
+    ${
+      field === "arabic" &&
+      duplicateArabic.has(entry.arabic?.trim().toLowerCase())
+        ? "border-red-500 bg-red-50 focus:ring-red-500"
+        : "focus:ring-blue-500"
+    }
+  `}
+  value={entry[field]}
+  onChange={e => updateEntry(index, field, e.target.value)}
+/>
+
             </td>
           ))}
 

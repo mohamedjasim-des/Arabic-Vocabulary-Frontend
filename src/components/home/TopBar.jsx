@@ -53,7 +53,7 @@ export default function TopBar() {
   
 
   return (
-    <div className="flex items-center justify-between px-6 py-4 bg-white shadow-md rounded-b-lg sticky top-0 z-20">
+    <div className="flex items-center justify-between px-6 py-4 bg-white shadow-md rounded-b-lg sticky top-0 z-30">
       
       {/* Greeting + Profile */}
       <div className="flex items-center gap-4">
