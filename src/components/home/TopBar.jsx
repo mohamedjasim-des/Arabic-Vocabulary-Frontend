@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function TopBar() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if(user) return;
@@ -21,6 +22,7 @@ export default function TopBar() {
   })
 
   const handleDownload = async () => {
+    setLoading(true);
     try {
       const blob = await downloadWordsPDF();
 
@@ -39,6 +41,7 @@ export default function TopBar() {
     } catch (err) {
       alert("Failed to download PDF");
     }
+    setLoading(false);
   };
 
   const handleCopyPDFLink = async () => {
@@ -76,9 +79,9 @@ export default function TopBar() {
           <Share2 size={16} />
           <span className="hidden md:inline">Share</span>
         </button>
-        <button onClick={() => handleDownload()} className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 text-gray-700 font-medium shadow-sm">
-          <Download size={16} />
-          <span className="hidden md:inline">Export</span>
+        <button onClick={() => handleDownload()} className={`flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 text-gray-700 font-medium shadow-sm ${loading ? "cursor-not-allowed opacity-50" : ""}`} disabled={loading  }>
+          {!loading && <Download size={16} />}
+          <span className="hidden md:inline">{loading ? "Loading..." : "Export"}</span>
         </button>
       </div>
     </div>

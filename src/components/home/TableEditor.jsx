@@ -191,11 +191,11 @@ export default function TableEditor() {
         <table className="w-full text-sm border-collapse">
           <thead className="hidden md:table-header-group bg-gray-100 sticky top-35 z-20">
             <tr>
-              <th className="p-3">S.No</th>
-              <th className="p-3 font-arabic text-lg">العربية</th>
-              <th className="p-3">English</th>
-              <th className="p-3 font-tamil">தமிழ்</th>
-              <th className="p-3">Note</th>
+              <th className="p-3" style={{fontFamily: "Poppins, sans-serif"}}>S.No</th>
+              <th className="p-3 font-arabic text-lg" style={{fontFamily: "Scheherazade New, serif"}}>العربية</th>
+              <th className="p-3" style={{fontFamily: "Poppins, sans-serif"}}>English</th>
+              <th className="p-3 font-tamil" style={{fontFamily: "Sawarabi Gothic, sans-serif"}}>தமிழ்</th>
+              <th className="p-3" style={{fontFamily: "Poppins, sans-serif"}}>Note</th>
               <th className="p-3"></th>
             </tr>
           </thead>

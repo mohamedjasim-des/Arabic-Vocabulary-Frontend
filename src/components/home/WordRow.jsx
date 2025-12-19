@@ -25,16 +25,25 @@ export default function WordRow({ row, onChange, onDelete, duplicateArabic }) {
     onChange(row.id, updated);
   };
 
+  const font_size = (field) => {
+    switch (field) {
+      case "arabic":
+        return "font-arabic font-medium text-base leading-none tracking-[0.01em] text-right";
+      case "tamil":
+        return "font-tamil font-light text-[14px] leading-[100%] tracking-[1%]";
+      default:
+        return "font-english font-normal text-sm leading-none tracking-[0.01em]";
+    }
+  };
+
   const font = (field) => {
     switch (field) {
       case "arabic":
-        return "font-arabic text-lg text-right rtl";
-      case "english":
-        return "font-english";
+        return "Scheherazade New, serif";
       case "tamil":
-        return "font-tamil";
+        return "Sawarabi Gothic, sans-serif";
       default:
-        return "";
+        return "Poppins, sans-serif";
     }
   };
 
@@ -78,20 +87,21 @@ export default function WordRow({ row, onChange, onDelete, duplicateArabic }) {
                 {field}
               </span>
               <input
-  className={`
-    w-full px-3 py-2 border rounded
-    focus:ring-2
-    ${font(field)}
-    ${
-      field === "arabic" &&
-      duplicateArabic.has(entry.arabic?.trim().toLowerCase())
-        ? "border-red-500 bg-red-50 focus:ring-red-500"
-        : "focus:ring-blue-500"
-    }
-  `}
-  value={entry[field]}
-  onChange={e => updateEntry(index, field, e.target.value)}
-/>
+                className={`
+                  w-full px-3 py-2 border rounded
+                  focus:ring-2
+                  ${font_size(field)}
+                  ${
+                    field === "arabic" &&
+                    duplicateArabic.has(entry.arabic?.trim().toLowerCase())
+                      ? "border-red-500 bg-red-50 focus:ring-red-500"
+                      : "focus:ring-blue-500"
+                  }
+                `}
+                style={{ fontFamily: font(field) }}
+                value={entry[field]}
+                onChange={e => updateEntry(index, field, e.target.value)}
+              />
 
             </td>
           ))}
